@@ -58,7 +58,7 @@ export default function BlogTitleGenerator() {
 
   return (
     <div className="h-screen overflow-auto flex flex-col items-center bg-black text-white">
-      <div className="w-full max-w-4xl p-4">
+      <div className="w-full max-w-5xl p-4">
         <h2 className="text-4xl font-bold mb-4 pb-2 text-center">
           Blog Title Generator
         </h2>

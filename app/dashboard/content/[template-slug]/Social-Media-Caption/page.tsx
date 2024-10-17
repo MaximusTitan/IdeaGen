@@ -105,7 +105,7 @@ export default function SocialMediaCaptionGenerator() {
               </CardTitle>
             </CardHeader>
             <CardContent className="overflow-y-auto max-h-80">
-              <p className="text-gray-500 whitespace-pre-line">
+              <p className="text-white whitespace-pre-line">
                 {output || "Your generated captions and hashtags will appear here."}
               </p>
             </CardContent>
