@@ -1,6 +1,5 @@
 // app/dashboard/page.tsx
-'use client'
-
+"use client";
 
 import DashboardLayout from "./DashboardLayout";
 import TemplateListSec from "./TemplateListSec";

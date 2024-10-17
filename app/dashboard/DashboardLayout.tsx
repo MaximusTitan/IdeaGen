@@ -1,6 +1,6 @@
 // app/dashboard/DashboardLayout.tsx
 
-'use client';
+"use client";
 
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
