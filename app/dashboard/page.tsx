@@ -1,12 +1,14 @@
-import SearchSection from './SearchSection';
+// app/dashboard/page.tsx
+'use client'
 
-function Dashboard() {
+
+import DashboardLayout from "./DashboardLayout";
+import TemplateListSec from "./TemplateListSec";
+
+export default function Dashboard() {
   return (
-    <div>
-      <SearchSection/>
-      
-    </div>
+    <DashboardLayout>
+      <TemplateListSec />
+    </DashboardLayout>
   );
 }
-
-export default Dashboard;

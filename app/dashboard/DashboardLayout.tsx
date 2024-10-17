@@ -1,24 +1,22 @@
-"use client"
+// app/dashboard/DashboardLayout.tsx
 
-import { useState, useCallback, useMemo } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Home, Search, Clock, Settings, CreditCard, TrendingUp, User, Package, BookOpen, Video, Hash } from "lucide-react"
-import TemplateListSec from "./TemplateListSec"
-import SearchSection from "./SearchSection"
+'use client';
 
-export default function Dashboard() {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
+import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { User, Home, Search, Clock, Settings, CreditCard, TrendingUp } from "lucide-react";
+import { UserButton } from "@clerk/nextjs";
+
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleMouseEnter = useCallback(() => {
-    setIsExpanded(true)
-  }, [])
+    setIsExpanded(true);
+  }, []);
 
   const handleMouseLeave = useCallback(() => {
-    setIsExpanded(false)
-  }, [])
+    setIsExpanded(false);
+  }, []);
 
   return (
     <div className="flex h-screen bg-black text-white overflow-hidden">
@@ -97,20 +95,18 @@ export default function Dashboard() {
       {/* Main Content */}
       <main className={`flex-1 flex flex-col transition-all duration-300 ${isExpanded ? "ml-64" : "ml-20"}`}>
         {/* Top Bar */}
-        <header className="flex justify-between items-center p-4">
-          <div className="w-12"></div> {/* Spacer */}
+        <header className="flex justify-between items-center p-4 bg-gray-900">
           <h1 className="text-2xl font-bold">IdeaGen</h1>
-          <Button variant="ghost" size="icon" className="w-12 h-12">
-            <User className="h-6 w-6" />
-          </Button>
+
+          {/* User Button - Aligned to the right */}
+          <div>
+            <UserButton />
+          </div>
         </header>
 
-        {/* Search Bar */}
-        <SearchSection/>
-
-        {/* Feature Cards */}
-        <TemplateListSec/>
+        {/* Render the dynamic children */}
+        <div className="p-6">{children}</div>
       </main>
     </div>
-  )
+  );
 }
