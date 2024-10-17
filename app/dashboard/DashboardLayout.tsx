@@ -4,7 +4,7 @@
 
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { User, Home, Search, Clock, Settings, CreditCard, TrendingUp } from "lucide-react";
+import { User, Home, Search, Clock, Settings, CreditCard, TrendingUp, Receipt } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -49,9 +49,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="flex-1 w-full space-y-4 my-4">
           {[
             { icon: Home, label: "Home" },
-            { icon: Search, label: "Search" },
             { icon: Clock, label: "History" },
             { icon: Settings, label: "Settings" },
+            { icon: Receipt, label: "Billing" },
           ].map(({ icon: Icon, label }, index) => (
             <Button
               key={index}
