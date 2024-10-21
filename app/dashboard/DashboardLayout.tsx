@@ -105,7 +105,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </header>
 
         {/* Render the dynamic children */}
-        <div className="p-6">{children}</div>
+        <div className="p-2">{children}</div>
       </main>
     </div>
   );

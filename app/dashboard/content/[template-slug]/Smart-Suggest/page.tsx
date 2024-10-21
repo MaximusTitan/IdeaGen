@@ -9,83 +9,111 @@ import { generateResponse } from "@/utils/gemini-Api"; // Make sure to import yo
 import { saveAIOutput } from "@/utils/dbactions"; // Added import for saving to database
 import { useUser } from "@clerk/nextjs";
 
-export default function BlogTitleGenerator() {
-  const [blogTopic, setBlogTopic] = useState("");
+export default function SmartSuggestGenerator() {
+  const [blogUrl, setBlogUrl] = useState("");
   const [output, setOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { user } = useUser(); // Retrieve user details
 
   const handleGenerate = async () => {
-    if (!blogTopic) {
-      alert("Please provide a blog topic to generate titles.");
+    if (!blogUrl) {
+      alert("Please provide a valid blog URL.");
       return;
     }
-
+  
+    // Ensure the URL is properly formatted
+    let formattedUrl = blogUrl.trim();
+    if (!formattedUrl.startsWith("http://") && !formattedUrl.startsWith("https://")) {
+      formattedUrl = `https://${formattedUrl}`;
+    }
+  
     setIsLoading(true);
-
-    const prompt = `Generate catchy blog titles for the topic: ${blogTopic}`;
-    console.log("Prompt:", prompt);
-
+  
     try {
+      // Step 1: Fetch the blog content from the API
+      const response = await fetch("/api/fetchBlogContent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: formattedUrl }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch blog content.");
+      }
+  
+      const { content } = await response.json();
+      console.log("Fetched Blog Content:", content); // Log the fetched content
+  
+      // Step 2: Use the fetched content to generate blog post ideas
+      const prompt = `Generate a list of creative and catchy blog post titles based on the following content: "${content}". Generate atleast 20 titles and Each title should be engaging and formatted like a headline, without any additional explanations or context. And please don't say this line Here are some creative and catchy blog post titles based on the provided HTML code, instead say Here are some creative and catchy blog post title: `;
+      console.log("Prompt:", prompt);
+  
       const result = await generateResponse(prompt);
-      console.log("Generated Blog Title:", result);
-      setOutput(result || 'No output generated. Please try again.');
-
-      // Save to database - Added this part
+      console.log("Generated Suggestions:", result);
+      setOutput(result || "No suggestions generated. Please try again.");
+  
+      // Save to database
       const userEmail = user?.emailAddresses[0]?.emailAddress || "unknown";
-      const templateSlug = "blog-title-generator";
+      const templateSlug = "smart-suggest-tool"; // Adjust the slug as necessary
       const createdAt = new Date().toISOString();
-
-      await saveAIOutput(blogTopic, templateSlug, result, userEmail, createdAt);
-
+  
+      await saveAIOutput(blogUrl, templateSlug, result, userEmail, createdAt);
+      console.log("Blog suggestions saved successfully");
+  
     } catch (error) {
       console.error("Failed to generate content:", error);
       setOutput("Failed to generate content. Please try again.");
     }
-
+  
     setIsLoading(false);
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleGenerate();
-  };
+  
+  
+  
+  
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      handleGenerate();
+    };
 
   return (
     <div className="h-screen overflow-auto flex flex-col items-center bg-black text-white">
       <div className="w-full max-w-5xl p-4">
         <h2 className="text-4xl font-bold mb-4 pb-2 text-center">
-          Blog Title Generator
+          Smart Suggest Tool
         </h2>
-
+        
         <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
           {/* Left Column - Form */}
           <div className="flex-1">
             <h3 className="text-2xl font-semibold mb-4">
-              Generate Blog Titles
+              Generate Blog Post Ideas
             </h3>
             <p className="text-gray-400 mb-6">
-              Struggling with writer's block? Get fresh, trending blog titles tailored to your audience with just a few keywords.
+              Enter your blog's URL to generate a list of potential blog post ideas based on your existing content.
             </p>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label
-                  htmlFor="blogTopic"
+                  htmlFor="blogUrl"
                   className="block text-sm font-medium text-gray-400 mb-1"
                 >
-                  BLOG TOPIC
+                  BLOG URL
                 </label>
                 <Input
-                  id="blogTopic"
-                  placeholder="Enter your blog topic..."
-                  value={blogTopic}
-                  onChange={(e) => setBlogTopic(e.target.value)}
+                  id="blogUrl"
+                  placeholder="Enter your blog's URL..."
+                  value={blogUrl}
+                  onChange={(e) => setBlogUrl(e.target.value)}
                   className="bg-gray-900 border-gray-700 text-white"
                 />
               </div>
               <Button type="submit" className="w-full">
-                {isLoading ? 'Generating...' : 'Generate'}
+                {isLoading ? 'Generating...' : 'Generate Ideas'}
               </Button>
             </form>
           </div>

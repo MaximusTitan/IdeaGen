@@ -9,14 +9,18 @@ import { generateResponse } from "@/utils/gemini-Api";
 import { saveAIOutput } from "@/utils/dbactions";
 import { useUser } from "@clerk/nextjs";
 
+
 export default function ProductDescriptionPage() {
     const [productName, setProductName] = useState("");
     const [productInfo, setProductInfo] = useState("");
     const [output, setOutput] = useState("");
     const router = useRouter();
     const { user } = useUser();
+    const [isLoading, setIsLoading] = useState(false); // Add this line
+
 
     const handleGenerate = async () => {
+        setIsLoading(true); 
         try {
             const prompt = `Product Name: ${productName}\nProduct Information: ${productInfo}`;
             console.log("Prompt:", prompt);
@@ -41,6 +45,8 @@ export default function ProductDescriptionPage() {
         } catch (error) {
             console.error("Failed to generate content:", error);
             setOutput("Failed to generate content. Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -49,20 +55,12 @@ export default function ProductDescriptionPage() {
         handleGenerate();
     };
 
-    const handleBack = () => {
-        router.back();
-    };
-
     return (
         <div className="h-screen overflow-auto flex flex-col items-center bg-black text-white">
             <div className="w-full  p-4">
                 <h2 className="text-4xl font-bold mb-5 pb-2 text-center">
                     Product Description Generator
                 </h2>
-
-                <Button onClick={handleBack} className="mb-6">
-                    Back
-                </Button>
 
                 <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
                     {/* Left Column - Form */}
@@ -106,7 +104,7 @@ export default function ProductDescriptionPage() {
                                 />
                             </div>
                             <Button type="submit" className="w-full">
-                                Generate
+                            {isLoading ? 'Generating...' : 'Generate'}
                             </Button>
                         </form>
                     </div>

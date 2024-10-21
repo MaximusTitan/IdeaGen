@@ -19,7 +19,7 @@ const VideoScriptGenerator: React.FC = () => {
   const { user } = useUser(); // Use Clerk user to get email
 
   const handleGenerate = async () => {
-    if (!videoTopic || !targetAudience || !scriptStyle) {
+    if (!videoTopic || !targetAudience ) {
       alert("Please provide all inputs to generate the video script.");
       return;
     }
@@ -56,20 +56,12 @@ const VideoScriptGenerator: React.FC = () => {
     handleGenerate();
   };
 
-  const handleBack = () => {
-    router.back();
-  };
-
   return (
     <div className="h-screen overflow-auto flex flex-col items-center bg-black text-white">
       <div className="w-full p-4">
         <h2 className="text-4xl font-bold mb-2 text-center">
           Video Script Generator
         </h2>
-
-        <Button onClick={handleBack} className="mb-2">
-          Back
-        </Button>
 
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6"> 
           {/* Left Column - Form */}
@@ -116,7 +108,7 @@ const VideoScriptGenerator: React.FC = () => {
                   htmlFor="script-style"
                   className="block text-sm font-medium text-gray-400 mb-1"
                 >
-                  SCRIPT STYLE
+                  SCRIPT STYLE (Optional)
                 </label>
                 <Textarea
                   id="script-style"
