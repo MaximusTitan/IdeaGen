@@ -26,9 +26,9 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-black text-white">
-      <h1 className="text-5xl font-bold mb-4">Welcome to AI Content Generator</h1>
+      <h1 className="text-5xl font-bold mb-4">Welcome to AgentRED, AI Content Generator</h1>
       <p className="text-lg mb-6 text-center px-4">
-        Create high-quality content with ease! Our AI-powered tools will help you generate everything from product descriptions to video scripts.
+        Create high-quality content with ease! Our AI-powered tools will help you generate everything from Blog Writing to video scripts.
       </p>
     
       <div className="flex flex-col md:flex-row md:space-x-4">

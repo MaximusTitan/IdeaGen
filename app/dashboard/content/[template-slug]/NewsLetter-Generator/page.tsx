@@ -73,7 +73,7 @@ export default function NewsletterGenerator() {
               Generate Newsletters
             </h3>
             <p className="text-gray-400 mb-6">
-              IdeaGen's Newsletter Generator helps you create engaging newsletters from various inputs.
+              AgentRED's Newsletter Generator helps you create engaging newsletters from various inputs.
             </p>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

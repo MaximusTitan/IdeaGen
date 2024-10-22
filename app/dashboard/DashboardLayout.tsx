@@ -96,7 +96,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <main className={`flex-1 flex flex-col transition-all duration-300 ${isExpanded ? "ml-64" : "ml-20"}`}>
         {/* Top Bar */}
         <header className="flex justify-between items-center p-4 bg-gray-900">
-          <h1 className="text-2xl font-bold">IdeaGen</h1>
+          <h1 className="text-xl font-bold ml-3">AgentRED</h1>
 
           {/* User Button - Aligned to the right */}
           <div>

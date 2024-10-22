@@ -73,7 +73,7 @@ export default function ArticleGenerator() {
               Generate Articles
             </h3>
             <p className="text-gray-400 mb-6">
-              IdeaGen's Article Generator helps you create comprehensive articles on any topic quickly.
+              AgentRED's Article Generator helps you create comprehensive articles on any topic quickly.
             </p>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

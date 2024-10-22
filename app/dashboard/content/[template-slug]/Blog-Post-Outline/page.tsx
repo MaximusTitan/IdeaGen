@@ -68,7 +68,7 @@ export default function BlogOutlineGenerator() {
               Generate Blog Post Outlines
             </h3>
             <p className="text-gray-400 mb-6">
-              IdeaGen's Blog Post Outline Generator helps you create engaging post outlines fast. 
+              AgentRED's Blog Post Outline Generator helps you create engaging post outlines fast. 
             </p>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

@@ -63,13 +63,13 @@ export default function TemplateListSec() {
     {
       icon: LetterTextIcon,
       title: "Blog Post Outline Generator",
-      description: "IdeaGen's Blog Post Outline Generator helps you create engaging post outlines fast. ",
+      description: "AgentRED's Blog Post Outline Generator helps you create engaging post outlines fast. ",
       path: "/dashboard/content/blog-post-outline"
     },
     {
       icon: FileText,
       title: "Article Writer",
-      description: "IdeaGen's AI-powered Article Writer will generate an outline for your topic or keyword.",
+      description: "AgentRED's AI-powered Article Writer will generate an outline for your topic or keyword.",
       path: "/dashboard/content/article-writer"
     },
     {
@@ -81,7 +81,7 @@ export default function TemplateListSec() {
     {
       icon: ScanBarcodeIcon,
       title: "Smart Suggest Tool",
-      description: "IdeaGen's Smart Suggest scans your blog's content and generates a list of blog post ideas based on your existing content.",
+      description: "AgentRED's Smart Suggest scans your blog's content and generates a list of blog post ideas based on your existing content.",
       path: "/dashboard/content/Smart-Suggest-Tool"
     },
     // ... (other template items)
