@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import  Checkbox  from "@/components/ui/checkbox"; // Make sure to import the checkbox you created
@@ -9,6 +9,13 @@ import { useRouter } from "next/navigation";
 import { generateResponse } from "@/utils/gemini-Api"; // Ensure this points to your API function
 import { saveAIOutput } from "@/utils/dbactions"; // Added import for saving to database
 import { useUser } from "@clerk/nextjs";
+import Modal from "@/components/ui/model";
+
+interface PreviousCreation {
+    inputdata: string;
+    airesponse: string;
+    createdat: string;
+}
 
 export default function NewsletterGenerator() {
   const [inputText, setInputText] = useState(""); // To hold user input
@@ -17,6 +24,9 @@ export default function NewsletterGenerator() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { user } = useUser(); // Retrieve user details
+  const [previousCreations, setPreviousCreations] = useState<PreviousCreation[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<string | null>(null);
 
   const handleGenerate = async () => {
     if (!inputText) {
@@ -55,13 +65,35 @@ export default function NewsletterGenerator() {
     setIsLoading(false);
   };
 
+
+  const fetchPreviousCreations = async () => {
+    const userEmail = user?.emailAddresses[0]?.emailAddress;
+    if (!userEmail) return;
+
+    const templateSlug = "article-generator";
+    try {
+        const response = await fetch(`/api/getPreviousCreations?templateSlug=${templateSlug}&userEmail=${userEmail}`);
+        const data = await response.json();
+
+        if (!data.error) {
+            setPreviousCreations(data.data || []);
+        }
+    } catch (error) {
+        console.error("Failed to fetch previous creations:", error);
+    }
+};
+
+useEffect(() => {
+    fetchPreviousCreations();
+}, [user]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleGenerate();
   };
   return (
     <div className="h-screen overflow-auto flex flex-col items-center bg-black text-white">
-      <div className="w-full max-w-5xl p-4">
+      <div className="w-full p-4">
         <h2 className="text-4xl font-bold mb-4 pb-2 text-center">
           Newsletter Generator
         </h2>
@@ -113,7 +145,7 @@ export default function NewsletterGenerator() {
                 Output
               </CardTitle>
             </CardHeader>
-            <CardContent className="overflow-y-auto max-h-80">
+            <CardContent className="overflow-y-auto max-h-80, pb-4]">
               <p 
                 className="text-white whitespace-pre-line"
                 dangerouslySetInnerHTML={{ __html: output }} // Use for rendering HTML content
@@ -121,7 +153,65 @@ export default function NewsletterGenerator() {
             </CardContent>
           </Card>
         </div>
+
+         {/* Previous Creations Section */}
+         <div className="mb-20 pt-6 pb-20"> {/* Changed margin */}
+          <h3 className="text-2xl font-semibold pt-8 mb-4 text-center">Previous Creations</h3>
+          {previousCreations.length > 0 ? (
+            <div className="overflow-y-auto border border-gray-700 rounded-lg" style={{ height: '400px' }}> {/* Fixed height for consistency */}
+              <table className="w-full bg-black text-white">
+                <thead className="sticky top-0 bg-black z-10">
+                  <tr>
+                    <th className="p-2 text-left">Prompt</th>
+                    <th className="p-2 text-left">Created</th>
+                    <th className="p-2">View</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {previousCreations.map((creation, index) => (
+                    <tr key={index} className="border-b border-gray-700 hover:bg-gray-900 transition-colors">
+                      <td className="p-2">{creation.inputdata}</td>
+                      <td className="p-2">{new Date(creation.createdat).toLocaleString()}</td>
+                      <td className="p-2 text-center">
+                        <Button
+                          variant="link"
+                          onClick={() => {
+                            setModalContent(creation.airesponse);
+                            setIsModalOpen(true);
+                          }}
+                          className="text-white hover:text-blue-400"
+                        >
+                          View
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-gray-400 text-center">No previous creations found.</p>
+          )}
+        </div>
+
+        {/* Modal */}
+        <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <div className="relative p-4">
+            <Button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-2 left-2"
+            >
+              &#8592;
+            </Button>
+            <h3 className="text-xl font-bold mb-4 text-center">Previous Content</h3>
+            <p className="text-white whitespace-pre-line overflow-y-auto max-h-80">
+              {modalContent}
+            </p>
+          </div>
+        </Modal>
       </div>
     </div>
   );
 }
+
+     

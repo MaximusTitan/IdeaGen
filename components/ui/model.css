@@ -1,0 +1,29 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure the modal overlays other content */
+  }
+  
+  .modal-content {
+    background: black;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh; /* Prevents overflow */
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: adds shadow for depth */
+  }
+  
+  .scrollable-content {
+    max-height: 300px; /* Adjust as needed */
+    overflow-y: auto;  /* Enables vertical scrolling */
+  }
+  
